@@ -1,0 +1,21 @@
+<!--Este archivo `index.html` es la **plantilla base del frontend**. Define el documento HTML
+ con codificación UTF-8 y un ícono para la pestaña del navegador. Incluye la etiqueta 
+ `<meta>` para hacer que la página sea **responsiva** en dispositivos móviles. Dentro del 
+ `<body>` contiene un `<div>` con id `root`, que es el punto donde React montará toda la 
+  aplicación, y carga el script principal (`main.tsx`) como módulo ES, iniciando así la 
+  ejecución del frontend.-->
+
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>clientapp</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

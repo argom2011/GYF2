@@ -1,0 +1,59 @@
+# **Documentación Funcional – Home Banking (Usuario)**
+
+## **Objetivo**
+
+Permitir al cliente consultar de manera rápida y segura el estado de su cuenta principal y los últimos movimientos de su tarjeta principal, sin necesidad de revisar toda su información financiera.
+
+---
+
+## **Funcionalidades disponibles para el usuario**
+
+1. **Consulta de saldo**
+
+   * El usuario puede ver el saldo actual de su **cuenta principal**.
+   * Se muestra en la pantalla principal del home banking de forma destacada.
+
+2. **Últimos movimientos**
+
+   * El usuario puede visualizar los **últimos 5 movimientos** de su tarjeta principal asociada a la cuenta principal.
+   * Cada movimiento incluye:
+
+     * **Fecha** de la operación.
+     * **Monto** (positivo para ingresos, negativo para pagos o egresos).
+     * **Descripción** de la transacción (por ejemplo, “Pago de tarjeta” o “Depósito”).
+
+3. **Ingreso de datos**
+
+   * Para consultar, el usuario ingresa su **número de cliente** en un campo de texto.
+   * Se activa un botón **Consultar** que muestra la información.
+
+4. **Mensajes de error y validación**
+
+   * Si no se ingresa un número de cliente, aparece un mensaje: *“Ingrese un número de cliente”*.
+   * Si el cliente no existe o no hay datos disponibles, aparece un mensaje informativo.
+   * Esto evita que la pantalla quede vacía o confusa.
+
+---
+
+## **Flujo de interacción del usuario**
+
+1. El usuario abre el home banking en el navegador.
+2. Ingresa su **número de cliente** en el formulario.
+3. Presiona **Consultar**.
+4. La aplicación muestra:
+
+   * Saldo de la cuenta principal.
+   * Últimos 5 movimientos de la tarjeta principal.
+5. Si ocurre algún error o no hay datos:
+
+   * Se muestra un mensaje claro indicando el problema.
+
+---
+
+## **Notas importantes**
+
+* Cada cliente **solo tiene una cuenta principal**, por lo que el saldo mostrado corresponde a esa cuenta.
+* Cada cuenta principal tiene **una tarjeta principal**, que es de la que se muestran los movimientos.
+* La interfaz es **simple y rápida**, diseñada para brindar información clara al usuario final.
+
+

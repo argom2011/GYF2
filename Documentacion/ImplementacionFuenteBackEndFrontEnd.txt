@@ -1,0 +1,137 @@
+# **Documento Técnico – Sistema Home Banking (React + .NET 8 / SQL Server 2019)**
+
+## **1. Requisitos Previos**
+
+* **Backend:** .NET 8 SDK, Visual Studio o VS Code, SQL Server Express 2019
+* **Frontend:** Node.js LTS (20.x), npm o yarn, editor de código (VS Code recomendado)
+* Navegador moderno para probar la aplicación
+
+---
+
+## **2. Estructura del Proyecto**
+
+### **Backend (.NET 8)**
+
+```
+GYF/
+├─ Controllers/
+│  └─ ClientesController.cs          # API endpoint /resumen
+├─ Repository/
+│  └─ ClienteRepository.cs           # Lógica de acceso a SQL Server
+├─ Models/
+│  ├─ Domain/                        # Modelos de base de datos
+│  │  ├─ Cliente.cs
+│  │  ├─ Cuenta.cs
+│  │  ├─ Tarjeta.cs
+│  │  └─ Movimiento.cs
+│  └─ Responses/                      # Modelos para API
+│     ├─ ResumenCliente.cs
+│     └─ MovimientoResumen.cs
+├─ appsettings.json                   # ConnectionStrings
+└─ Program.cs                         # Pipeline HTTP, CORS, middlewares
+```
+
+### **Frontend (React + TypeScript)**
+
+```
+ClientApp/
+├─ src/
+│  ├─ api/
+│  │  ├─ clienteApi.ts               # Función getResumenCliente
+│  │  └─ types.ts                    # Tipos ResumenCliente y Movimiento
+│  ├─ components/
+│  │  └─ ResumenCliente.tsx          # Componente de UI
+│  ├─ App.tsx
+│  ├─ main.tsx
+│  └─ index.css
+├─ package.json
+└─ tsconfig.json
+```
+
+---
+
+## **3. Backend – .NET 8**
+
+### **Repositorio ClienteRepository**
+
+* Ubicación: `Repository/ClienteRepository.cs`
+* Función principal: `GetResumenCliente(int clienteId)`
+* Conecta con SQL Server usando **Dapper**
+* Ejecuta `sp_GetResumenCliente` y retorna `ResumenCliente`:
+
+  * `SaldoCuentaPrincipal` (decimal)
+  * Últimos 5 `Movimientos` de la tarjeta principal
+* Maneja errores SQL con excepciones
+
+### **Controlador ClientesController**
+
+* API endpoint: `GET /api/clientes/{clienteId}/resumen`
+* Llama al repositorio de manera **asincrónica**
+* Devuelve JSON al frontend
+
+### **Pipeline y CORS**
+
+* Configuración de CORS para permitir solicitudes desde `http://localhost:5173`
+* Middleware opcional para redirigir errores 404 a `https://gyf.com.ar`
+
+---
+
+## **4. Frontend – React + TypeScript**
+
+### **Tipos TypeScript**
+
+* `ResumenCliente` → `{ saldoCuentaPrincipal: number, movimientos: Movimiento[] }`
+* `Movimiento` → `{ fecha: string, monto: number, descripcion: string }`
+
+### **Función API**
+
+* `getResumenCliente(clienteId: number)` hace fetch al backend
+* Devuelve `Promise<ResumenCliente>`
+* Maneja errores si el cliente no existe o falla la conexión
+
+### **Componente ResumenCliente**
+
+* Permite ingresar `ClienteId`
+* Muestra:
+
+  * Saldo de la cuenta principal
+  * Últimos 5 movimientos de la tarjeta principal
+* Maneja errores y casos sin datos
+* Estilos en `ResumenCliente.css`
+
+### **Levantar Frontend**
+
+```bash
+cd ClientApp
+npm install
+npm run dev
+```
+
+* Levanta el frontend en `http://localhost:5173`
+* Requiere backend activo en `http://localhost:5079`
+
+---
+
+## **5. Base de Datos (SQL Server 2019)**
+
+* Tablas: `Clientes`, `Cuentas`, `Tarjetas`, `Movimientos`
+* Stored procedure: `sp_GetResumenCliente`
+
+  * Entrada: `@ClienteId INT`
+  * Salida:
+
+    * Saldo de la cuenta principal
+    * Últimos 5 movimientos de la tarjeta principal
+* Maneja casos sin cuenta o tarjeta principal
+
+---
+
+## **6. Consideraciones funcionales**
+
+* Cada cliente tiene **una sola cuenta principal**
+* Cada cuenta principal tiene **una tarjeta principal**
+* Frontend solo muestra datos de la cuenta principal
+* Se usan mensajes claros para errores y ausencia de datos
+* Backend con **.NET 8 y Dapper**, frontend con **React + TypeScript + Vite**
+
+
